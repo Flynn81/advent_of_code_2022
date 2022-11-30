@@ -115,20 +115,19 @@ func sumSizes(fn string) int {
 	for fileScanner.Scan() {
 		whatToDo, dName, f, d := processLine(fileScanner.Text())
 		if whatToDo == "addDirectory" {
-			d.parentDirectory = curDir //maybechange to :=
-			(*curDir).directories = append((*curDir).directories, d)
+			d.parentDirectory = curDir
+			curDir.directories = append(curDir.directories, d)
 		} else if whatToDo == "changeDirectory" {
-			for _, sd := range (*curDir).directories {
-				if sd.name == dName {
-					fmt.Println(len((*curDir).directories))
-					curDir = &sd
+			for i := 0; i<len(curDir.directories); i++ {
+				if curDir.directories[i].name == dName {
+					curDir = &curDir.directories[i]
 					break
 				}
 			}
 		} else if whatToDo == "addFile" {
-			(*curDir).files = append((*curDir).files, f)
+			curDir.files = append(curDir.files, f)
 		} else if whatToDo == "upOne" {
-			curDir = (*curDir).parentDirectory
+			curDir = curDir.parentDirectory
 		} else if whatToDo == "returnToRoot" {
 			curDir = &root
 		}
