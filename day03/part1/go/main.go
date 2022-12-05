@@ -3,20 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
- "os"
-	 //"strings"
+	"os"
 )
-
-// const (
-// 	rockValue     = 1
-// 	paperValue    = 2
-// 	scissorsValue = 3
-// 	lostValue     = 0
-// 	drawValue     = 3
-// 	wonValue      = 6
-// )
-
-//fmt.Println(int("Hello"[1]))
 
 func calculatePriority(i int) int {
 	if i >= 97 {
@@ -28,9 +16,9 @@ func calculatePriority(i int) int {
 
 func processRucksack(r string) int {
 	compartmentSize := len(r) / 2
-	for i := 0; i<compartmentSize; i++ {
+	for i := 0; i < compartmentSize; i++ {
 		//consider creating two strings via slices and using strings.Count or strings.Contains
-		for j := compartmentSize; j<len(r); j++ {
+		for j := compartmentSize; j < len(r); j++ {
 			if r[i] == r[j] {
 				return calculatePriority(int(r[i]))
 			}
