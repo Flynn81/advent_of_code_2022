@@ -36,19 +36,15 @@ func calcSize(d *Directory) {
 		calcSize(&d.directories[i])
 		d.size += d.directories[i].size
 	}
-	fmt.Println(d.name)
-	fmt.Println(d.size)
 }
 
-func sumDirectories(d *Directory) int {
-	sum := 0
+func getAllDirs(d *Directory) []*Directory {
+	dirs := make([]*Directory, 0)
+	dirs = append(dirs, d)
 	for i:=0; i<len(d.directories); i++ {
-		if d.directories[i].size <= 100000 {
-			sum += d.directories[i].size
-		}
-		sum += sumDirectories(&d.directories[i])
+		dirs = append(dirs, getAllDirs(&d.directories[i])...)
 	}
-	return sum
+	return dirs
 }
 
 func processLine(line string) (string, string, File, Directory) {
@@ -76,7 +72,7 @@ func processLine(line string) (string, string, File, Directory) {
 		}
 }
 
-func sumSizes(fn string) int {
+func sizeToDelete(fn string) int {
 	readFile, err := os.Open(fn)
 	defer readFile.Close()
 
@@ -108,10 +104,17 @@ func sumSizes(fn string) int {
 		}
 	}
 	calcSize(&root)
-	printDir(root)
-	return sumDirectories(&root)
+	unused := 70000000 - root.size
+	smallest := 70000000
+	allDirs := getAllDirs(&root)
+	for i:=0; i<len(allDirs); i++ {
+		if allDirs[i].size + unused >= 30000000 && allDirs[i].size <= smallest {
+			smallest = allDirs[i].size
+		}
+	}
+	return smallest
 }
 
 func main() {
-	fmt.Println(sumSizes("../../input"))
+	fmt.Println(sizeToDelete("../../input"))
 }
